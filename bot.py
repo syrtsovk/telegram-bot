@@ -24,7 +24,7 @@ dp = Dispatcher(bot)
 # Функция для получения FPS с помощью ffmpeg
 def get_fps(video_path):
     try:
-        # Получаем FPS через ffmpeg
+        # Используем ffmpeg для извлечения данных о видео
         result = subprocess.run(
             ['ffmpeg', '-i', video_path],
             stderr=subprocess.PIPE, stdout=subprocess.PIPE, text=True
@@ -32,10 +32,14 @@ def get_fps(video_path):
         for line in result.stderr.splitlines():
             if 'fps' in line:
                 fps = float(line.split('fps')[0].strip().split()[-1])
+                print(f"FPS получено через ffmpeg: {fps}")
                 return fps
+        # Если не удается найти fps, установим дефолтное значение
+        print("FPS не найден, установлено значение по умолчанию: 30")
+        return 30
     except Exception as e:
         print(f"Ошибка при получении FPS: {e}")
-    return 30  # Возвращаем 30 по умолчанию, если не удалось получить FPS
+        return 30  # Возвращаем 30 по умолчанию в случае ошибки
 
 # Функция для скачивания видео
 def download_video(url):
