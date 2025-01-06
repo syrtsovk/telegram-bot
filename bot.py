@@ -17,6 +17,7 @@ if not API_TOKEN:
 
 print(f"Loaded API_TOKEN: {API_TOKEN}")  # Это поможет убедиться, что токен правильно загружен
 
+# Инициализация бота
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot)
 
@@ -50,4 +51,20 @@ def download_video(url):
             ydl.download([url])  # Скачиваем видео по ссылке
 
         # Получаем FPS с помощью ffmpeg
-        fps = get_fp
+        fps = get_fps('downloaded_video.mp4')
+        print(f"Видео скачано успешно! FPS: {fps}")
+    except Exception as e:
+        print(f"Ошибка при скачивании видео: {e}")
+
+# Обработчик команды /download
+@dp.message_handler(commands=['download'])
+async def cmd_download(message: types.Message):
+    try:
+        url = message.text.split(" ", 1)[1]  # Получаем ссылку после команды
+        download_video(url)  # Загружаем видео
+        await message.reply(f"Видео скачано: {url}")
+    except IndexError:
+        await message.reply("Пожалуйста, предоставьте ссылку в формате: /download <ссылка>")
+
+if __name__ == '__main__':
+    executor.start_polling(dp, skip_updates=True)
