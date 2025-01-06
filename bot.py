@@ -1,3 +1,5 @@
+import logging
+logging.basicConfig(level=logging.INFO)
 from aiogram import Bot, Dispatcher, types
 from aiogram.utils import executor
 import yt_dlp
