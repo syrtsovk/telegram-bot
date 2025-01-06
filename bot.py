@@ -3,6 +3,7 @@ from aiogram.utils import executor
 import yt_dlp
 from dotenv import load_dotenv
 import os
+from moviepy.editor import VideoFileClip
 
 # Загрузка переменных окружения
 load_dotenv()
@@ -24,7 +25,15 @@ def download_video(url):
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             ydl.download([url])  # Скачиваем видео по ссылке
 
-        print("Видео скачано успешно!")
+        # Теперь обрабатываем видео, чтобы избежать ошибки fps
+        try:
+            video = VideoFileClip("downloaded_video.mp4")
+            fps = video.fps if video.fps else 30  # Если fps не найден, ставим 30
+        except Exception as e:
+            print(f"Ошибка при обработке видео: {e}")
+            fps = 30  # Устанавливаем безопасное значение FPS
+
+        print(f"Видео скачано успешно! FPS: {fps}")
     except Exception as e:
         print(f"Ошибка при скачивании видео: {e}")
 
