@@ -5,15 +5,18 @@ import subprocess
 from dotenv import load_dotenv
 import os
 
-# Получаем токен из переменной окружения
-API_TOKEN = os.getenv('BOT_TOKEN')
-
-print(f"Loaded API_TOKEN: {API_TOKEN}")  # Это поможет убедиться, что токен правильно загружен
-
 # Загрузка переменных окружения
 load_dotenv()
 
-API_TOKEN = os.getenv('BOT_TOKEN')  # Получаем токен из переменной окружения
+# Получаем токен из переменной окружения
+API_TOKEN = os.getenv('BOT_TOKEN')
+
+# Проверка, что токен был загружен правильно
+if not API_TOKEN:
+    raise ValueError("BOT_TOKEN не найден в переменных окружения!")
+
+print(f"Loaded API_TOKEN: {API_TOKEN}")  # Это поможет убедиться, что токен правильно загружен
+
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot)
 
@@ -47,20 +50,4 @@ def download_video(url):
             ydl.download([url])  # Скачиваем видео по ссылке
 
         # Получаем FPS с помощью ffmpeg
-        fps = get_fps('downloaded_video.mp4')
-        print(f"Видео скачано успешно! FPS: {fps}")
-    except Exception as e:
-        print(f"Ошибка при скачивании видео: {e}")
-
-# Обработчик команды /download
-@dp.message_handler(commands=['download'])
-async def cmd_download(message: types.Message):
-    try:
-        url = message.text.split(" ", 1)[1]  # Получаем ссылку после команды
-        download_video(url)  # Загружаем видео
-        await message.reply(f"Видео скачано: {url}")
-    except IndexError:
-        await message.reply("Пожалуйста, предоставьте ссылку в формате: /download <ссылка>")
-
-if __name__ == '__main__':
-    executor.start_polling(dp, skip_updates=True)
+        fps = get_fp
