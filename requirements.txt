@@ -2,5 +2,5 @@ aiogram
 yt-dlp
 openai
 googletrans==4.0.0-rc1
-moviepy
+moviepy==1.0.3
 imageio[ffmpeg]
