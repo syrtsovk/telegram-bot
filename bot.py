@@ -1,9 +1,14 @@
 from aiogram import Bot, Dispatcher, types
 from aiogram.utils import executor
 import yt_dlp
+import subprocess
 from dotenv import load_dotenv
 import os
-import subprocess
+
+# Получаем токен из переменной окружения
+API_TOKEN = os.getenv('BOT_TOKEN')
+
+print(f"Loaded API_TOKEN: {API_TOKEN}")  # Это поможет убедиться, что токен правильно загружен
 
 # Загрузка переменных окружения
 load_dotenv()
